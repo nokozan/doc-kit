@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import MonacoEditor from "@monaco-editor/react";
+import TestCaseManager from "../components/TestCaseManager";
 
 export default function MethodPage() {
   const { name, method } = useParams();
@@ -51,6 +52,19 @@ export default function MethodPage() {
         <h3 className="font-semibold mb-1">Output</h3>
         <pre className="text-sm text-gray-800">{output}</pre>
       </div>
+
+      <TestCaseManager
+        structName={name!}
+        methodName={method!}
+        runMethod={async (input) => {
+          if (method === "validate") {
+            return input.includes("@")
+              ? "Validation successful!"
+              : "Validation failed: Invalid email format.";
+          }
+          return "dummy output for " + method;
+        }}
+      />
     </div>
   );
 }

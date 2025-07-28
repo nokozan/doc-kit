@@ -1,38 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// import { useState } from "react";
+// import reactLogo from "./assets/react.svg";
+// import viteLogo from "/vite.svg";
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import StructPage from "./pages/StructPage";
+import MethodPage from "./pages/MethodPage";
+import Home from "./pages/Home";
 
 function App() {
-  const [count, setCount] = useState(0)
+  // const [count, setCount] = useState(0)
 
   return (
-    <>
-    <div className="bg-green-100 text-blue-900 p-4">
-      Tailwind is working!
-    </div>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router>
+      <div className="flex h-screen">
+        <div className="w-64 bg-slate-100 border-r p-4">
+          <Sidebar />
+        </div>
+
+        <div className="flex-1 p-6 overflow-y-auto">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/struct/:name" element={<StructPage />} />
+            <Route
+              path="/struct/:name/method/:method"
+              element={<MethodPage />}
+            />
+          </Routes>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;

@@ -1,70 +1,79 @@
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import MonacoEditor from "@monaco-editor/react";
-import TestCaseManager from "../components/TestCaseManager";
+
+// import TestCaseManager from "@/components/TestCaseManager";
+import axios from "axios";
+
+import { extractErrorMessage } from "@/utils/http";
+import ReactJson from "react-json-view";
 
 export default function MethodPage() {
-  const { name, method } = useParams();
-  const [input, setInput] = useState(
-    '{\n "id": "123",\n "email": "test@example.com"\n}'
-  );
-  const [output, setOutput] = useState("");
+  const { structName, methodName } = useParams();
+  const [input, setInput] = useState("{}");
+  const [result, setResult] = useState<unknown>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  //Dummy mock execution function
-  function runMethod() {
-    if (method === "validate") {
-      if (input.includes("@")) {
-        setOutput("Validation successful!");
-      } else {
-        setOutput("Validation failed: Invalid email format.");
-      }
-    } else {
-      setOutput(`Output of ${method} for struct ${name}: ${input}`);
+  // const [output, setOutput] = useState("");
+
+  const runMethod = async () => {
+    try {
+      const inputJson = JSON.parse(input);
+      const res = await axios.post<{ result: unknown }>(
+        `/run/${structName}/${methodName}`,
+        inputJson
+      );
+      setResult(res.data.result);
+      setError(null);
+    } catch (err: unknown) {
+      setError(extractErrorMessage(err));
+      setResult(null);
     }
-  }
+  };
 
   return (
-    <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold mb-4">Method: {method}()</h1>
-      <p className="text-gray-600">
-        Attached to struct: <strong>{name}</strong>
-      </p>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">
+        {structName} → {methodName}
+      </h1>
 
-      <div>
-        <h2 className="font-semibold mb-2">Input JSON</h2>
+      <div className="mb-4">
+        <label className="text-sm text-gray-500">Input JSON</label>
         <MonacoEditor
-          language="json"
-          value={input}
           height="200px"
-          theme-="vs-dark"
-          options={{ fontSize: 14, minimap: { enabled: false } }}
-          onChange={(v) => setInput(v ?? "")}
+          defaultLanguage="json"
+          value={input}
+          onChange={(v) => setInput(v || "")}
+          theme="vs-dark"
         />
       </div>
+
       <button
         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         onClick={runMethod}
       >
-        Run Method
+        Try It Out
       </button>
 
-      <div className="mt-4 bg-slate-100 p-4 rounded">
-        <h3 className="font-semibold mb-1">Output</h3>
-        <pre className="text-sm text-gray-800">{output}</pre>
+      <div className="mt-6">
+        {error && (
+          <div className="text-red-500">
+            <strong>Error:</strong> {error}
+          </div>
+        )}
+        {result !== null && result !== undefined && (
+          <div>
+            <h2 className="font-bold text-lg mb-2">Result</h2>
+            <ReactJson
+              // src={result as object}
+              src={result}
+              name={false}
+              collapsed={false}
+              enableClipboard={false}
+            />
+          </div>
+        )}
       </div>
-
-      <TestCaseManager
-        structName={name!}
-        methodName={method!}
-        runMethod={async (input) => {
-          if (method === "validate") {
-            return input.includes("@")
-              ? "Validation successful!"
-              : "Validation failed: Invalid email format.";
-          }
-          return "dummy output for " + method;
-        }}
-      />
     </div>
   );
 }

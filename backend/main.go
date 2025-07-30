@@ -2,11 +2,16 @@ package main
 
 import (
 	"doc-kit/api"
+	"doc-kit/db"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/joho/godotenv/autoload" // load .env file automatically
 )
 
 func main() {
+
+	db.InitDB()
+	db.Migrate()
 
 	r := gin.Default()
 

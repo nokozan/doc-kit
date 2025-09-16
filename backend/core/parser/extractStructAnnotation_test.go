@@ -28,6 +28,6 @@ func TestExtractStructDoc(t *testing.T) {
 	if doc != expected {
 		t.Errorf("Expected doc '%s', got '%s'", expected, doc)
 	} else {
-		t.Logf("Extracted doc: %s", doc)
+		// t.Logf("Extracted doc: %s", doc)
 	}
 }

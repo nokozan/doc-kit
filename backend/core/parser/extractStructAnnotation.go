@@ -32,3 +32,11 @@ func extractStructDoc(genDecl *ast.GenDecl) string {
 
 	return ""
 }
+
+// extractStructComment reads comment above the struct
+func extractStructComment(decl *ast.GenDecl) string {
+	if decl.Doc == nil {
+		return ""
+	}
+	return decl.Doc.Text()
+}

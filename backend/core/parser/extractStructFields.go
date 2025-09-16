@@ -52,9 +52,10 @@ func extractStructFields(structType *ast.StructType) []FieldMeta {
 
 		for _, name := range field.Names {
 			fields = append(fields, FieldMeta{
-				Name: name.Name,
-				Type: exprToType(field.Type),
-				Tag:  extractTag(field.Tag),
+				Name:    name.Name,
+				Type:    exprToType(field.Type),
+				Tag:     extractTag(field.Tag),
+				Comment: extractFieldComment(field),
 			})
 		}
 	}

@@ -17,7 +17,7 @@ func TestExtractStructName(t *testing.T) {
 	for _, decl := range node.Decls {
 		structName := extractStructName(decl)
 		if structName == "MyTestStruct" {
-			t.Logf("Extracted struct name: %s", structName)
+			// t.Logf("Extracted struct name: %s got %s", structName, structName)
 			return
 		}
 	}

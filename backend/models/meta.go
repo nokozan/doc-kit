@@ -1,5 +1,9 @@
 package models
 
+//Serve frontend docs show and trial
+//Help LLMs suggest matching structs
+//
+
 type FieldMeta struct {
 	Name    string `json:"name"`
 	Type    string `json:"type"`

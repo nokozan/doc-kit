@@ -5,7 +5,7 @@ import (
 	"doc-kit/models"
 )
 
-func MapStructMetaToModel(p *parser.StructMeta) models.Struct {
+func MapStructMetaToModel(p *parser.StructMeta, repoId uint) models.Struct {
 	fields := make([]models.Field, len(p.Fields))
 	for _, f := range p.Fields {
 		fields = append(fields, models.Field{
@@ -19,5 +19,6 @@ func MapStructMetaToModel(p *parser.StructMeta) models.Struct {
 		Name:    p.Name,
 		Comment: p.Comment,
 		Fields:  fields,
+		RepoID:  repoId,
 	}
 }

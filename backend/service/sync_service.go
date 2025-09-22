@@ -37,7 +37,7 @@ func SyncRepoStructs(dbConn *gorm.DB, gitRepo models.GitRepo) error {
 
 	var allStructs []models.Struct
 	for _, p := range parsed {
-		allStructs = append(allStructs, MapStructMetaToModel(p))
+		allStructs = append(allStructs, MapStructMetaToModel(p, gitRepo.ID))
 	}
 
 	return db.SaveStructs(dbConn, allStructs)

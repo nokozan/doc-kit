@@ -1,6 +1,7 @@
 package api
 
 import (
+	"doc-kit/db"
 	"doc-kit/service"
 
 	"github.com/gin-gonic/gin"
@@ -19,5 +20,6 @@ func RegisterRoutes(r *gin.Engine) {
 	api.GET("/structs_dummy", service.GetAllStructs(true))
 	// r.GET("/structs/:name", service.GetOneStruct)
 	// r.POST("/run/:struct/:method", runMethod)
-	// api.POST("/repos/:id/sync", api.SyncRepoHandler(dbConn))
+	api.POST("/repos/:id/sync", SyncRepoHandler(db.DB))
+	api.GET("/repos/:id/structs", GetStructsByRepoID(db.DB))
 }

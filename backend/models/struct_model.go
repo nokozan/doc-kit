@@ -10,4 +10,5 @@ type Struct struct {
 	Name    string  `gorm:"not null;unique" json:"name"`
 	Comment string  `gorm:"type:text" json:"comment"`
 	Fields  []Field `gorm:"foreignKey:StructID" json:"fields"`
+	RepoID  uint    `json:"repo_id" gorm:"not null;index"`
 }
